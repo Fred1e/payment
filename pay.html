@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FredieTech Payment Method</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f0f0f;
+      color: white;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-top: 1em;
+      color: #00ffe7;
+      text-shadow: 0 0 10px #00ffe7;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      gap: 2em;
+      margin-top: 2em;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      background: #1a1a1a;
+      border-radius: 20px;
+      padding: 2em;
+      width: 300px;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+      transition: transform 0.3s ease;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .card h2 {
+      color: #00ffcc;
+      text-shadow: 0 0 5px #00ffe7;
+    }
+
+    .btn {
+      margin-top: 1em;
+      background: #00ffe7;
+      color: #000;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 1em;
+      cursor: pointer;
+      box-shadow: 0 0 15px #00ffe7;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #00cccc;
+    }
+
+    .stats {
+      margin-top: 1em;
+      font-size: 0.9em;
+      color: #aaa;
+    }
+
+    .footer {
+      background: linear-gradient(to right, #101010, #202020);
+      padding: 2em 1em;
+      margin-top: 4em;
+      color: #aaa;
+      border-top: 3px solid #00ffe7;
+    }
+
+    .footer h3 {
+      font-size: 1.5em;
+      margin-bottom: 0.5em;
+      color: white;
+    }
+
+    .socials {
+      margin: 1em 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1em;
+    }
+
+    .socials a {
+      text-decoration: none;
+      color: white;
+      font-size: 1.2em;
+      display: flex;
+      align-items: center;
+      gap: 0.4em;
+    }
+
+    .socials a:hover {
+      color: #00ffe7;
+    }
+
+    .neon {
+      animation: flicker 1.5s infinite alternate;
+    }
+
+    @keyframes flicker {
+      0% { text-shadow: 0 0 5px #00ffe7, 0 0 10px #00ffe7; }
+      100% { text-shadow: 0 0 15px #00ffee, 0 0 25px #00ffee; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="neon">FredieTech Payment Method</h1>
+
+  <div class="container" id="cards">
+    <!-- Cards dynamically injected below -->
+  </div>
+
+  <div class="footer">
+    <h3>Thanks for choosing FredieTech</h3>
+    <p>© FrediEzra 2025. All rights reserved.</p>
+    
+    <div class="socials">
+      <a href="https://fredietech-website.vercel.app" target="_blank">🌐 FredieTech</a>
+      <a href="https://whatsapp.com/channel/0029VaihcQv84Om8LP59fO3f" target="_blank">🟢 WhatsApp Channel</a>
+      <a href="https://www.youtube.com/freeonlinetvT1" target="_blank">📺 YouTube</a>
+      <a href="https://www.facebook.com/FrediEzra" target="_blank">📘 Facebook</a>
+      <a href="https://www.instagram.com/frediezra" target="_blank">📷 Instagram</a>
+      <a href="https://github.com/Fred1e" target="_blank">💻 GitHub</a>
+      <a href="https://sociabuzz.com/frediezra255" target="_blank">☕ Buy Me Coffee</a>
+    </div>
+  </div>
+
+  <script>
+    const paymentOptions = [
+      { id: 'vodacom', name: 'Vodacom Tanzania 🇹🇿', ussd: '*150*00#', desc: 'Pay using M-Pesa to +255764182801.', color: '🔴' },
+      { id: 'halotel', name: 'Halotel Tanzania 🇹🇿', ussd: '*150*88#', desc: 'Pay using Halopesa to +255620814108.', color: '🟠' },
+      { id: 'yas', name: 'Yas Mixx Tanzania 🇹🇿', ussd: '*150*88#', desc: 'Pay using M-PESA to +255764182801.', color: '🔵' },
+      { id: 'airtel-tz', name: 'Airtel Tanzania 🇹🇿', ussd: '*150*88#', desc: 'Pay using M-lesa to +255764182801.', color: '🔴' },
+      { id: 'airtel-ke', name: 'Airtel Kenya 🇰🇪', ussd: '*222#', desc: 'Pay with Airtel Money to +255764182801.', color: '🔴' },
+      { id: 'safaricom', name: 'Safaricom Kenya 🇰🇪', ussd: '*234#', desc: 'Pay via M-PESA Paybill or API to +255764182801.', color: '🟢' }
+    ];
+
+    const container = document.getElementById('cards');
+
+    paymentOptions.forEach(opt => {
+      let count = localStorage.getItem(opt.id + '_likes') || 0;
+      let visits = parseInt(localStorage.getItem(opt.id + '_visits') || 0) + 1;
+      localStorage.setItem(opt.id + '_visits', visits);
+
+      const time = new Date();
+      const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <h2>${opt.name}</h2>
+        <p>${opt.desc}</p>
+        <button class="btn" onclick="window.location.href='tel:${opt.ussd}'">Pay ${opt.color}</button>
+        <div class="stats">
+          Visitors: ${visits} <br>
+          Likes: <span id="${opt.id}_likes">${count}</span>
+          <button onclick="like('${opt.id}')">❤️</button><br>
+          Time: ${time.toLocaleTimeString()}<br>
+          Timezone: ${zone}
+        </div>
+      `;
+      container.appendChild(card);
+    });
+
+    function like(id) {
+      let current = parseInt(localStorage.getItem(id + '_likes') || 0);
+      current++;
+      localStorage.setItem(id + '_likes', current);
+      document.getElementById(id + '_likes').textContent = current;
+    }
+  </script>
+
+</body>
+</html>
